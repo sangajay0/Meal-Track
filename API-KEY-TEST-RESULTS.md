@@ -56,3 +56,14 @@ Without backend (or direct mode API key for local tests), analysis/chat intentio
 ## Recommended Run Mode
 
 backend mode with API key kept on server only.
+
+## GitHub Models Verification (Latest)
+
+- Provider mode: github
+- Token type: GitHub fine-grained PAT with models permission
+- Backend direct tests passed for both sample images:
+  - /Users/sainathadepu/Documents/Supratik/istockphoto-481149282-1024x1024.jpg
+  - /Users/sainathadepu/Documents/Supratik/5-cp-tray-lid.jpg
+- /api/chat endpoint also returned valid model output.
+
+If UI shows occasional "Analysing your meal..." longer for large images, backend response is still valid; wait for completion and cards to render.

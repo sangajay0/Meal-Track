@@ -1,64 +1,58 @@
-# API Configuration Test Guide
+# API and Token Test Guide
 
-## Goal
+Use this checklist after setting your provider token.
 
-Validate that image analysis and chat are using your configured mode correctly:
-
-- backend mode (recommended)
-- direct mode (local testing only)
-
-## A. Backend mode validation (recommended)
-
-Set config in browser console:
+## A. Backend mode setup
 
 ```js
-window.setAppConfig({
-  MODE: 'backend',
-  API_ENDPOINT: 'http://localhost:3000'
-}, { persist: true, persistSecrets: false });
+setAppConfig({ MODE: 'backend', API_ENDPOINT: 'http://localhost:3000' }, { persist: true, persistSecrets: false });
 location.reload();
 ```
 
-Expected behavior:
+## B. Verify backend provider
 
-1. Upload an image (JPG/PNG)
+Backend terminal should print:
+
+- Provider=github Model=...
+
+or the provider you selected.
+
+## C. Analyze image test
+
+1. Upload image
 2. Click Analyse
-3. Meal items should come from API response (not demo fallback)
-4. Ask Poshan chat should return backend response
+3. Confirm no fallback message appears
+4. Confirm food list is populated
 
-If it fails:
+## D. Chat test
 
-- Check backend is running
-- Check endpoint path support:
-  - /api/analyze-meal
-  - /api/chat
-- Check browser Network tab for HTTP status
+1. Open Ask Poshan
+2. Send message
+3. Confirm response is model-generated
 
-## B. Direct mode validation (testing only)
+## E. Failure diagnostics
 
-```js
-window.setAppConfig({
-  MODE: 'direct',
-  API_KEY: 'sk-ant-REPLACE_ME'
-}, { persist: false, persistSecrets: false });
-location.reload();
-```
+- API 401 invalid token: token wrong/revoked/permission missing
+- API 403: entitlement/org policy issue
+- API 429: throttling/rate limit
+- API 400: model/input request issue
 
-Expected behavior:
+### GitHub-specific auth error
 
-- Analyse and chat call Anthropic endpoint directly
-- Invalid key should show API error then demo fallback for analysis
+If you see:
 
-## C. Reset config
+`The `models` permission is required to access this endpoint`
 
-```js
-localStorage.removeItem('pp_cfg');
-location.reload();
-```
+Your token is valid but missing GitHub Models permission.
 
-## Security checklist
+Fix:
 
-- Never hardcode real API keys in source files
-- Keep production in backend mode
-- Do not persist secrets in browser storage
-- Rotate keys if previously exposed
+1. Regenerate fine-grained PAT
+2. Enable GitHub Models inference/models permission
+3. Save and restart backend proxy
+
+## F. Security checklist
+
+- Keep secrets in env vars only
+- Do not store secrets in docs or source
+- Rotate token if ever exposed
