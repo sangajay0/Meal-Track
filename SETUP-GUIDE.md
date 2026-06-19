@@ -189,3 +189,6 @@ setAppConfig({ MODE: 'backend', API_ENDPOINT: 'https://api.yourdomain.com' }, { 
 - Rotate tokens immediately if exposed
 - Prefer fine-grained least-privilege tokens
 - Use separate tokens for dev and production
+
+cd '/Users/sainathadepu/Documents/Supratik' && MODEL_PROVIDER=github GITHUB_TOKEN='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' GITHUB_MODEL='gpt-4o-mini' node local_api_proxy.js
+
